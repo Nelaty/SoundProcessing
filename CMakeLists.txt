@@ -5,7 +5,7 @@ include(cmake/CPM.cmake)
 include(cmake/CMUtils.cmake)
 
 CPMAddPackage("gh:jarro2783/cxxopts@2.2.1")
-CPMAddPackage("gh:gabime/spdlog@1.8.5")
+CPMAddPackage("gh:gabime/spdlog@1.9.2")
 CPMAddPackage("gh:catchorg/Catch2@2.5.0")
 CPMAddPackage("gh:kcat/openal-soft#1.21.1")
 CPMAddPackage("gh:fmtlib/fmt#8.0.0")
