@@ -2,7 +2,6 @@
 #include <sp/import/soundFileImporter.hpp>
 #include <sp/player/player.hpp>
 
-#include <sp/filter/soundPipeline.hpp>
 
 #include <iostream>
 
@@ -21,10 +20,6 @@ int main(int argc, char** argv)
         spdlog::error("no wav and ogg files present. aborting");
         return -1;
     }
-
-
-    //auto pipeline = sp::filter::SoundPipeline{};
-    //pipeline.add(std::make_shared<sp::filter::AmplitudeFilter>(1.0f));
 
     auto wav = sp::SoundFileImporter::import(wavFilePaths[rand() % wavFilePaths.size()]);
     auto ogg = sp::SoundFileImporter::import(oggFilePaths[0]);

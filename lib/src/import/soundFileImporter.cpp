@@ -13,7 +13,7 @@
 #include "sp/import/oggImporter.hpp"
 #include "sp/import/waveImporter.hpp"
 
-#include <spdlog/spdlog.h>
+#include "spdlog/spdlog.h"
 
 #include <array>
 #include <filesystem>
@@ -38,7 +38,7 @@ namespace sp
     {
         if (!std::filesystem::exists(path))
         {
-            spdlog::error("Filepath doesn't exist: {}", path.c_str());
+            //spdlog::error("Filepath doesn't exist: {}", path.c_str());
             return {};
         }
 
@@ -48,10 +48,10 @@ namespace sp
             for(const auto& importer : importerTable){
                 if(importer.first == type) return importer.second.import(path);
             }
-            spdlog::error("Unrecognized file type: {}", path.c_str());
+           // spdlog::error("Unrecognized file type: {}", path.c_str());
         } catch (std::exception& e) {
-            spdlog::error("Exception: {}", e.what());
-            spdlog::error("Failed to import sound file: {}", path.c_str());
+            //spdlog::error("Exception: {}", e.what());
+            //spdlog::error("Failed to import sound file: {}", path.c_str());
         }
 
         return {};

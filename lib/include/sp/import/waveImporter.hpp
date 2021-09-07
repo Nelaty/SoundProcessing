@@ -26,11 +26,11 @@ namespace sp
 
         SoundFileData import(const std::filesystem::path& path) const override
         {
-            spdlog::info("Import started for wav file: {}", path.c_str());
+            //spdlog::info("Import started for wav file: {}", path.c_str());
 
             std::fstream in(path, std::ios::in | std::ios::binary);
             if(!in.is_open()){
-                spdlog::error("Failed to open file: {}", path.c_str());
+                //spdlog::error("Failed to open file: {}", path.c_str());
                 return {};
             }
 
@@ -42,9 +42,9 @@ namespace sp
             const auto fmtSection = util::readBinary<FmtSection>(in);
             const auto dataSection = util::readBinary<DataSection>(in);
 
-            spdlog::info("{} | Size parsed: {}", toString(riffHeader), sizeof(RiffHeader));
-            spdlog::info("{} | Size parsed: {}", toString(fmtSection), sizeof(FmtSection));
-            spdlog::info("{} | Size parsed: {}", toString(dataSection), sizeof(DataSection));
+            //spdlog::info("{} | Size parsed: {}", toString(riffHeader), sizeof(RiffHeader));
+            //spdlog::info("{} | Size parsed: {}", toString(fmtSection), sizeof(FmtSection));
+            //spdlog::info("{} | Size parsed: {}", toString(dataSection), sizeof(DataSection));
 
             auto wavData = std::vector<char>(dataSection.subchunk2Size);
             in.read(wavData.data(), dataSection.subchunk2Size);

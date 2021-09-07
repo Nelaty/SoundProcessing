@@ -51,7 +51,7 @@ namespace sp
 
             alBufferData(buffer, static_cast<uint16_t>(wav.format), wav.data.data(), wav.data.size(), wav.frequency);
             if(const auto error = alGetError(); error != AL_NO_ERROR){
-                spdlog::error("{} {}: buffer initialization.", error, alErrorConversion(error));
+                spdlog::error("{} {}: buffer initialization.", static_cast<int>(error), alErrorConversion(error));
             } else {
                 spdlog::info("Buffer created and initialized");
             }
@@ -59,7 +59,7 @@ namespace sp
             // Play source
             alSourcePlay(source);
             if(const auto error = alGetError(); error != AL_NO_ERROR){
-                spdlog::error("{} {}: playing the sound file.", error, alErrorConversion(error));
+                spdlog::error("{} {}: playing the sound file.", static_cast<int>(error), alErrorConversion(error));
             }
 
             // Wait for audio to finish playing
