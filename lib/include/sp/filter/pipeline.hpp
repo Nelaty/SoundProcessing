@@ -33,37 +33,50 @@ public:
             port.m_source == m_source && port.m_target == m_target;
     }
 
+    bool bound() const
+    {
+        return m_source != nullptr;
+    }
+
     int         m_id;
     std::string m_name;
     Sample      m_value;
 
-    PipelineElement *m_source;
-    PipelineElement *m_target;
+    PipelineElementPtr m_source;
+    PipelineElement    *m_target;
 };
 
 class PipelineElement
 {
 public:
-    bool connect(PipelineElementPtr element, const PortPtr& port)
+    bool connect(const PortPtr& targetPort)
     {
-        if (!findSource(*port))
+        if(!targetPort)
         {
-            std::cout << "ERROR\n";
-             return false;
+            std::cout << "ERROR: target port is null\n";
+            return false;
         }
-
-        element->m_targets.emplace_back(port);
-        return true;
+        m_targets.emplace_back(targetPort);
     }
 
-    bool removeSourceConnections(PipelineElement& elment, const PortPtr& port)
+    void deleteTargetConnection(const PortPtr& port)
     {
-        return false;
+        m_targets.erase(std::remove(m_targets.begin(),
+                                     m_targets.end(),
+                                     port));
     }
 
-    bool removeTargetConnection(PipelineElement& element, const PortPtr& port)
+    void removeSourceConnection(const PortPtr& ptr)
     {
-        return false;
+        auto found = std::find(m_targets.begin(),
+                               m_targets.end(),
+                               ptr);
+        if(found == m_targets.end()) return;
+
+        auto source = (*found)->m_source;
+        if(!source) return;
+
+        source->deleteTargetConnection(ptr);
     }
 
     bool findSource(const Port &port)
@@ -144,7 +157,6 @@ protected:
         return port;
     }
 
-
 private:
     std::mutex  m_sourceIdMutex;
     std::size_t m_sourceId{0};
@@ -165,7 +177,7 @@ public:
         m_inputSignal = createPort("input");
     }
 
-    void setThreashold(float threshold)
+    void setThreshold(float threshold)
     {
         m_threshold = threshold;
     }
@@ -182,14 +194,24 @@ private:
     float m_threshold;
 };
 
-class AverageMixer
+class AverageMixer : public PipelineElement
 {
 public:
-    void execute()
+    void onExecute() override
     {
-
+        Sample average{0};
+        for(const auto& it : sources())
+        {
+            average += it->m_value / sources().size();
+        }
+        sendSignal(average);
     }
 
+    void addSource(PipelineElementPtr item, std::string name)
+    {
+        auto port = createPort(name);
+        item->connect(port);
+    }
 };
 
 class ConstantSource : public PipelineElement
