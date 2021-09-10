@@ -22,9 +22,6 @@ TEST_CASE("General pipeline test", "[sp][filter]")
     source->connect(lowPass->m_inputSignal);
     lowPass->connect(console->m_printValue);
 
-    //lowPass->connect(source, lowPass->m_inputSignal);
-    //console->connect(lowPass, console->m_printValue);
-
     Pipeline pipeline;
     pipeline.add(source);
     pipeline.add(lowPass);

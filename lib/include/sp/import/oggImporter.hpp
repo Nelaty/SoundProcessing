@@ -11,7 +11,7 @@
 #include "sp/entity/soundFileData.hpp"
 #include "sp/entity/soundFileType.hpp"
 
-#include <spdlog/spdlog.h>
+#include "spdlog/spdlog.h"
 
 #include <array>
 #include <fstream>
@@ -70,10 +70,10 @@ namespace sp
 
         SoundFileData import(const std::filesystem::path& path) const override
         {
-            //spdlog::info("Import started for ogg file: {}", path.c_str());
+            spdlog::info("Import started for ogg file: {}", path.c_str());
             std::fstream in(path, std::ios::in | std::ios::binary);
             if(!in.is_open()){
-                //spdlog::error("Failed to open file: {}", path.c_str());
+                spdlog::error("Failed to open file: {}", path.c_str());
                 return {};
             }
 
@@ -81,7 +81,7 @@ namespace sp
             result.path = path;
 
             const auto oggHeader = util::readBinary<OggMetaData>(in);
-            //spdlog::debug("Ogg Header: {}", toString(oggHeader));
+            spdlog::debug("Ogg Header: {}", toString(oggHeader));
 
             // Check for corruption
             if(oggHeader.capturePattern.data() != magicNumber){
